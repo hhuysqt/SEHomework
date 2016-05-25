@@ -18,11 +18,11 @@ int main()
 
 	c[0].x = c[0].y = 0, c[0].r = 1;
 
-	for(i = 1; i < 1000; i++)
+	for(i = 1; i < 1000;)
 	{
-		for(ctemp.x = -1; ctemp.x < 1; ctemp.x += SCALE)
+		for(ctemp.x = -1 + SCALE; ctemp.x < 1; ctemp.x += SCALE)
 		{
-			for(ctemp.y = -1; ctemp.y < 1; ctemp.y += SCALE)
+			for(ctemp.y = -1 + SCALE; ctemp.y < 1; ctemp.y += SCALE)
 			{
 				int j;
 				float rtemp = 10;
@@ -37,13 +37,24 @@ int main()
 						break;
 					}
 				}
-				rtemp = rtemp > ctemp.y ? ctemp.y : rtemp;
-				rtemp = rtemp > ctemp.x ? ctemp.x : rtemp;
-				if(ctemp.r < rtemp)
-					ctemp.r = rtemp;
+				float xmin = ctemp.x < 0 ? ctemp.x + 1 : 1 - ctemp.x;
+				float ymin = ctemp.y < 0 ? ctemp.y + 1 : 1 - ctemp.y;
+				if (rtemp > xmin)
+					rtemp = xmin;
+				if (rtemp > ymin)
+					rtemp = ymin;
+				if (cres.r < rtemp)
+				{
+					cres = ctemp;
+					cres.r = rtemp;
+				}
 			}
 		}
-		c[i] = ctemp;
-		printf("Filled: (%f, %f), %f\n", ctemp.x, ctemp.y, ctemp.r);
+		if (cres.r > 0)
+		{
+			c[i++] = cres;
+			printf("Filled: (%f, %f), %f\n", cres.x, cres.y, cres.r);
+			cres.r = 0;
+		}
 	}
 }
