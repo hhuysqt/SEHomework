@@ -9,6 +9,13 @@ typedef struct tag_point
 #define DISTANCE(a, b) sqrt((a.x - b.x)*(a.x - b.x) + (a.y - b.y)*(a.y - b.y))
 #define SCALE 0.001
 
+// 挖空几个点
+typedef struct tag_coo
+{
+	float x, y;
+} coordinate;
+coordinate magic_point[10] = {{0.5,0.5},{-0.5,0.5},{0.5,-0.5}}
+
 Circle c[1000];
 
 int main()
@@ -36,6 +43,11 @@ int main()
 						rtemp = 0;
 						break;
 					}
+				}
+				for(j = 0; j < 3; j++)
+				{
+					float dist = DISTANCE(ctemp, magic_point[j]);
+					rtemp = rtemp > dist ? dist : rtemp;
 				}
 				float xmin = ctemp.x < 0 ? ctemp.x + 1 : 1 - ctemp.x;
 				float ymin = ctemp.y < 0 ? ctemp.y + 1 : 1 - ctemp.y;
