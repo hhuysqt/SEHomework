@@ -14,18 +14,16 @@ typedef struct tag_coo
 {
 	float x, y;
 } coordinate;
-coordinate magic_point[10] = {{0.5,0.5},{-0.5,0.5},{0.5,-0.5}}
+coordinate magic_point[10] = {{0.5,0.5},{-0.5,0.5},{0.5,-0.5}};
 
 Circle c[1000];
 
 int main()
 {
 	int i;
-	Circle ctemp = {0};
+	Circle ctemp = {0}, cres;
 
-	c[0].x = c[0].y = 0, c[0].r = 1;
-
-	for(i = 1; i < 1000;)
+	for(i = 0; i < 1000;)
 	{
 		for(ctemp.x = -1 + SCALE; ctemp.x < 1; ctemp.x += SCALE)
 		{
