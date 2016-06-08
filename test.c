@@ -14,7 +14,7 @@ typedef struct tag_coo
 {
 	float x, y;
 } coordinate;
-coordinate magic_point[10] = {{0.5,0.5},{-0.5,0.5},{0.5,-0.5}};
+coordinate magic_point[10] = {{0.5,0.5},{-0.5,0.5},{0.5,-0.5},{0.6,0.6}};
 
 Circle c[1000];
 
@@ -42,7 +42,7 @@ int main()
 						break;
 					}
 				}
-				for(j = 0; j < 3; j++)
+				for(j = 0; j < 4; j++)
 				{
 					float dist = DISTANCE(ctemp, magic_point[j]);
 					rtemp = rtemp > dist ? dist : rtemp;
@@ -68,3 +68,4 @@ int main()
 		}
 	}
 }
+
