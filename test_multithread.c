@@ -25,12 +25,12 @@ HANDLE is_lock;
 Circle c[1000];
 int filled_num = 0;
 
-int CheckCirDuplicate(Circle cir)
+int CheckCirDuplicate(Circle cir, int curnum)
 {
 	int j;
 
 	// check each circle
-	for(j = 0; j < filled_num; j++)
+	for(j = 0; j < filled_num && j != curnum; j++)
 	{
 		float dist = DISTANCE(cir, c[j]) - c[j].r;
 		if(dist < 0)
@@ -62,21 +62,27 @@ int CheckCirDuplicate(Circle cir)
 DWORD WINAPI FillCircleThread(LPVOID p)
 {
 	coordinate* coo = (coordinate*)p;
-	Circle ctemp;
+	Circle* ctemp;
+	int curnum;
+
+	WaitForSingleObject(is_lock, INFINITE);
+	curnum = filled_num++;
+	ReleaseMutex(is_lock);
+
+	ctemp = &c[curnum];
 
 	for (
-	ctemp.x = coo->x, ctemp.y = coo->y, ctemp.r = 0;
-	CheckCirDuplicate(ctemp) == 0;
-	ctemp.r += SCALE
+	ctemp->x = coo->x, ctemp->y = coo->y, ctemp->r = 0;
+	CheckCirDuplicate(*ctemp, curnum) == 0;
+	ctemp->r += SCALE
 		);
 
-	if (ctemp.r > 0)
+	if (ctemp->r > 0)
 	{
-		WaitForSingleObject(is_lock, INFINITE);
-		c[filled_num++] = ctemp;
-		ReleaseMutex(is_lock);
-		printf("Filled: (%f, %f), %f\n", ctemp.x, ctemp.y, ctemp.r);
+		printf("Filled: (%f, %f), %f\n", ctemp->x, ctemp->y, ctemp->r);
 	}
+	else
+		printf("Rejected...\n");
 
 	return 0;
 }
